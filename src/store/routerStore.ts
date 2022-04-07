@@ -30,8 +30,10 @@ export const actionBackView = (set: SetState<RouterStore>, get: GetState<RouterS
 
 export const actionBackPanel = (set: SetState<RouterStore>, get: GetState<RouterStore>) => {
 	let currentPanelHistory = get().panelHistory;
+	let currentPanelParams = get().panelParams;
 	currentPanelHistory = currentPanelHistory.slice(0, currentPanelHistory.length - 1)
-	set(() => ({ panelHistory: currentPanelHistory }))
+	currentPanelParams = currentPanelParams.slice(0, currentPanelParams.length - 1);
+	set(() => ({ panelHistory: currentPanelHistory, panelParams: currentPanelParams }))
 
 	const lastIndex = currentPanelHistory.length - 1;
 	let activePanel;
@@ -50,7 +52,8 @@ export const actionBackPanel = (set: SetState<RouterStore>, get: GetState<Router
 type RouterStore = {
 	panelHistory: PanelIds[];
 	activePanel: PanelIds;
-	setActivePanel(activePanel: PanelIds): void;
+	panelParams: (Record<string, any> | null)[];
+	setActivePanel(activePanel: PanelIds, params?: Record<string, any> | null): void;
 	closeActivePanel(): void;
 
 	modalHistory: ModalIds[];
@@ -67,9 +70,11 @@ type RouterStore = {
 export const useRouterStore = create<RouterStore>((set, get) => ({
 	panelHistory: [PanelIds.Home],
 	activePanel: PanelIds.Home,
-	setActivePanel: (activePanel) => set((state) => ({
+	panelParams: [null],
+	setActivePanel: (activePanel, params = null) => set((state) => ({
 				activePanel,
-				panelHistory: [...state.panelHistory, activePanel]
+				panelHistory: [...state.panelHistory, activePanel],
+				panelParams: [...state.panelParams, params],
 	})),
 	closeActivePanel: () => actionBackPanel(set, get),
 

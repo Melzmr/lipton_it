@@ -1,12 +1,16 @@
 import { FC } from 'react';
-import { AdaptivityProvider, AppRoot } from '@vkontakte/vkui';
+import { AdaptivityProvider, AppRoot, SplitCol, SplitLayout } from '@vkontakte/vkui';
 
 import { App } from '../App';
 
 export const Adaptive: FC = () => (
   <AdaptivityProvider>
     <AppRoot>
-      <App />
+      <SplitLayout>
+        <SplitCol animate={false}>
+          <App />
+        </SplitCol>
+      </SplitLayout>
     </AppRoot>
   </AdaptivityProvider>
 );

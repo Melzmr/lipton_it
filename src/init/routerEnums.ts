@@ -4,6 +4,9 @@ export enum ViewIds {
 
 export enum PanelIds {
   Home = 'Home',
+  MyTests = 'MyTests',
+  Test = 'Test',
+  Success = 'Success',
 }
 
 export enum ModalIds {
