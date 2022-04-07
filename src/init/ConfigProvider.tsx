@@ -24,7 +24,7 @@ export const ConfigProvider: FC = () => {
     void bridge.send('VKWebAppInit');
 
     return () => bridge.unsubscribe(bridgeListener);
-  }, []);
+  }, [bridgeListener]);
 
   return (
     <VKUIConfigProvider scheme={scheme}>
