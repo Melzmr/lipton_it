@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Gallery, Headline, Radio, Subhead, Text } from '@vkontakte/vkui';
+import { Button, Caption, Gallery, Headline, Radio, Subhead, Text } from '@vkontakte/vkui';
 import { useRouterStore } from '../../store';
 import { PanelIds } from '../../init/routerEnums';
 import { Image } from '../../components/Image';
@@ -15,9 +15,9 @@ function Question({
   id: number;
   len: number;
   urls: [string, string];
-  onClick: (answer: 1 | 2) => void;
+  onClick: (answer: 0 | 1) => void;
 }): JSX.Element {
-  const [selected] = useState<1 | 2>(1);
+  const [selected, setSelected] = useState<0 | 1>(0);
 
   return (
     <>
@@ -25,7 +25,17 @@ function Question({
         Вопрос {id + 1} из {len}
       </Subhead>
       <Headline weight="regular">{question}</Headline>
-      <Gallery bullets={false} showArrows slideWidth="90%" style={{ marginTop: 24 }}>
+      <Caption style={{ paddingTop: 6, color: 'var(--text_secondary)' }}>
+        (кликните по картинке, чтобы увеличить)
+      </Caption>
+      <Gallery
+        onChange={(idx) => setSelected(idx as 0 | 1)}
+        slideIndex={selected}
+        bullets={false}
+        showArrows
+        slideWidth="90%"
+        style={{ marginTop: 24 }}
+      >
         <div>
           <a target="_blank" href={urls[0]} rel="noreferrer" style={{ display: 'block', marginRight: 12 }}>
             <Image imgUrl={urls[0]} />
@@ -46,16 +56,22 @@ function Question({
       <Subhead weight="regular" style={{ paddingTop: 32, color: 'var(--text_secondary)' }}>
         Выберите вариант ответа
       </Subhead>
-      <div style={{ display: 'flex' }}>
-        <Radio name="variant" value={1} checked={selected === 1}>
+      <div style={{ display: 'flex', paddingTop: 2 }}>
+        <Radio name="variant" checked={selected === 0} onClick={() => setSelected(0)}>
           1 вариант
         </Radio>
-        <Radio name="variant" value={2} checked={selected === 2}>
+        <Radio name="variant" checked={selected === 1} onClick={() => setSelected(1)}>
           2 вариант
         </Radio>
       </div>
       <div style={{ textAlign: 'right' }}>
-        <Button style={{ marginTop: 24 }} onClick={() => onClick(selected)}>
+        <Button
+          style={{ marginTop: 24 }}
+          onClick={() => {
+            setSelected(0);
+            onClick(selected);
+          }}
+        >
           Следующий вопрос
         </Button>
       </div>
@@ -102,7 +118,7 @@ export function SideBySideContent(): JSX.Element {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const setActivePanel = useRouterStore((state) => state.setActivePanel);
 
-  const handleOnClick = (answer: 1 | 2) => {
+  const handleOnClick = (answer: 0 | 1) => {
     console.log(answer);
     // TODO:
     // sendAnswerApi(answer);
