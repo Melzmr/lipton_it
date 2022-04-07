@@ -67,17 +67,25 @@ type RouterStore = {
 export const useRouterStore = create<RouterStore>((set, get) => ({
 	panelHistory: [PanelIds.Home],
 	activePanel: PanelIds.Home,
-	setActivePanel: (activePanel) => set({ activePanel }),
+	setActivePanel: (activePanel) => set((state) => ({
+				activePanel,
+				panelHistory: [...state.panelHistory, activePanel]
+	})),
 	closeActivePanel: () => actionBackPanel(set, get),
 
 	modalHistory: [],
 	activeModal: null,
-	setActiveModal: (activeModal) => set({ activeModal }),
+	setActiveModal: (activeModal) => set((state) => ({
+		activeModal,
+		modalHistory: [...state.modalHistory, activeModal],
+	})),
 	closeActiveModal: () => actionBackModal(set, get),
 
 	viewHistory: [ViewIds.BaseFlow],
 	activeView: ViewIds.BaseFlow,
-	setActiveView: (activeView) => set({ activeView }),
+	setActiveView: (activeView) => set((state) => ({
+		activeView,
+		viewHistory: [...state.viewHistory, activeView],
+	})),
 	closeActiveView: () => actionBackView(set, get),
-
 }))

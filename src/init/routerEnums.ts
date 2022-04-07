@@ -3,7 +3,7 @@ export enum ViewIds {
 }
 
 export enum PanelIds {
-  Home = 'Home'
+  Home = 'Home',
 }
 
 export enum ModalIds {
