@@ -29,7 +29,6 @@ const getContent = (testData: TTest): { text: string; icon: JSX.Element; startCo
   }
 };
 
-
 export function TestContent(testData: TTest): JSX.Element {
   const { icon, text, startContent } = getContent(testData);
   const [content, setContent] = useState<JSX.Element>();
