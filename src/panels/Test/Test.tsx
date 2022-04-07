@@ -19,7 +19,7 @@ export const Test: FC<TPanel> = memo(({ id }) => {
       try {
         const { id } = panelParams.current as { id: string };
 
-        setTestData(mocks.find((mockTest) => mockTest.id === id));
+        setTestData(mocks.find((mockTest) => mockTest._id === id));
       } catch (e) {
         setError(true);
       } finally {
@@ -49,7 +49,7 @@ export const Test: FC<TPanel> = memo(({ id }) => {
             </Tappable>
           }
         >
-          {testData?.type && getCaption(testData.type)}
+          {testData?.testType && getCaption(testData.testType)}
         </PanelHeader>
         <Spacing style={{ padding: 0 }} separator />
         {error && <Placeholder>Ошибка</Placeholder>}
