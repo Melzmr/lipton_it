@@ -1,5 +1,4 @@
 import React, { memo, useEffect, useState } from 'react';
-import { Icon56ComputerOutline, Icon56FragmentsOutline, Icon56RecentOutline } from '@vkontakte/icons';
 import { PanelIds } from 'init/routerEnums';
 import {
   Button,
@@ -17,8 +16,8 @@ import {
 import { TPanel } from '../TPanel';
 import { useRouterStore } from '../../store';
 import { TestCell } from '../../components/TestCell';
-import { mocks, TestStatus, TestType, TTest } from '../../store/testsMocks';
-import { getCaption } from '../../utils';
+import { mocks, TestStatus, TTest } from '../../store/testsMocks';
+import { getCaption, getIcon } from '../../utils';
 
 const getAfterText = (status: TestStatus): string => {
   switch (status) {
@@ -30,40 +29,6 @@ const getAfterText = (status: TestStatus): string => {
 
     case 'unavailable':
       return 'Не пройден';
-  }
-};
-
-const getIcon = (type: TestType): JSX.Element => {
-  switch (type) {
-    case 'five_sec':
-      return (
-        <Icon56RecentOutline
-          height={48}
-          width={48}
-          fill="var(--dynamic_red)"
-          style={{ marginRight: 12, marginTop: 8, marginBottom: 8 }}
-        />
-      );
-
-    case 'first_click':
-      return (
-        <Icon56ComputerOutline
-          height={48}
-          width={48}
-          fill="var(--dynamic_green)"
-          style={{ marginRight: 12, marginTop: 8, marginBottom: 8 }}
-        />
-      );
-
-    case 'side_by_side':
-      return (
-        <Icon56FragmentsOutline
-          height={48}
-          width={48}
-          fill="var(--dynamic_orange)"
-          style={{ marginRight: 12, marginTop: 8, marginBottom: 8 }}
-        />
-      );
   }
 };
 

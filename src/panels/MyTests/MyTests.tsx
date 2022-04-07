@@ -1,4 +1,4 @@
-import { FC, memo, useRef } from 'react';
+import { FC, memo } from 'react';
 import { Button, Div, Group, Panel, PanelHeader, Spacing, Tabs, TabsItem } from '@vkontakte/vkui';
 import { TPanel } from '../TPanel';
 import { useRouterStore } from '../../store';
@@ -7,8 +7,6 @@ import { PanelIds } from '../../init/routerEnums';
 export const MyTests: FC<TPanel> = memo(({ id }) => {
   const setActivePanel = useRouterStore((state) => state.setActivePanel);
   const closeActivePanel = useRouterStore((state) => state.closeActivePanel);
-  const panelParams = useRef(useRouterStore((state) => state.panelParams[state.panelParams.length - 1]));
-  console.log(panelParams.current);
 
   return (
     <Panel id={id}>
@@ -25,6 +23,9 @@ export const MyTests: FC<TPanel> = memo(({ id }) => {
         </Div>
         <Spacing separator />
         <Div>
+          <Button onClick={() => setActivePanel(PanelIds.CreateTest)} size="m" stretched>
+            create question
+          </Button>
           <Button onClick={closeActivePanel} size="m" stretched>
             Go back
           </Button>

@@ -7,6 +7,9 @@ import { useRouterStore } from './store';
 import { Test } from './panels/Test/Test';
 import { Success } from './panels/Success/Success';
 import { MyTests } from './panels/MyTests/MyTests';
+import { CreateQuestion } from './panels/CreateQuestion/CreateQuestion';
+import { CreateTest } from './panels/CreateTest/CreateTest';
+import { EditQuestion } from './panels/EditQuestion/EditQuestion';
 
 export const App: FC = () => {
   const activePanel = useRouterStore((state) => state.activePanel);
@@ -28,6 +31,9 @@ export const App: FC = () => {
       <Test id={PanelIds.Test} />
       <Success id={PanelIds.Success} />
       <MyTests id={PanelIds.MyTests} />
+      <CreateQuestion id={PanelIds.CreateQuestion} />
+      <CreateTest id={PanelIds.CreateTest} />
+      <EditQuestion id={PanelIds.EditQuestion} />
     </View>
   );
 };
