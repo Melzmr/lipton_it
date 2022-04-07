@@ -18,11 +18,11 @@ function Question({
 
   return (
     <>
-      <Subhead style={{ color: 'var(--text_secondary)' }}>
+      <Subhead style={{ color: 'var(--text_secondary)', paddingBottom: 2 }}>
         Вопрос {id + 1} из {len}
       </Subhead>
       <Headline weight="regular">{question}</Headline>
-      <Subhead style={{ color: 'var(--text_secondary)', paddingTop: 24 }}>Ответ</Subhead>
+      <Subhead style={{ color: 'var(--text_secondary)', paddingTop: 24, paddingBottom: 6 }}>Ответ</Subhead>
       <Textarea onChange={(ev) => setValue(ev.target.value)} value={value} placeholder="Напишите развёрнуто..." />
       <div style={{ textAlign: 'right' }}>
         <Button

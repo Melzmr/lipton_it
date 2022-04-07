@@ -19,7 +19,7 @@ function Question({
 }): JSX.Element {
   return (
     <>
-      <Subhead style={{ color: 'var(--text_secondary)' }}>
+      <Subhead style={{ color: 'var(--text_secondary)', paddingBottom: 2 }}>
         Вопрос {id + 1} из {len}
       </Subhead>
       <Headline weight="regular">{question}</Headline>
