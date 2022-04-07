@@ -42,7 +42,13 @@ function Question({
   );
 }
 
-export function Questions({ questions }: { questions: { question: string; id: number }[] }): JSX.Element {
+export function Questions({
+  questions,
+  title,
+}: {
+  questions: { question: string; id: number }[];
+  title: string;
+}): JSX.Element {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const setActivePanel = useRouterStore((state) => state.setActivePanel);
 
@@ -51,7 +57,7 @@ export function Questions({ questions }: { questions: { question: string; id: nu
     // TODO:
     // sendAnswerApi(answer);
     if (currentQuestion === questions.length - 1) {
-      setActivePanel(PanelIds.Success);
+      setActivePanel(PanelIds.Success, { testName: title });
     } else {
       setCurrentQuestion((state) => state + 1);
     }

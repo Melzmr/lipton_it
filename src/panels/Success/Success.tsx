@@ -8,7 +8,6 @@ import { PanelIds } from '../../init/routerEnums';
 export const Success: FC<TPanel> = memo(({ id }) => {
   const setActivePanel = useRouterStore((state) => state.setActivePanel);
   const panelParams = useRef(useRouterStore((state) => state.panelParams[state.panelParams.length - 1]));
-  console.log(panelParams.current);
 
   return (
     <Panel id={id}>
@@ -19,7 +18,9 @@ export const Success: FC<TPanel> = memo(({ id }) => {
           icon={<Icon56CheckCircleOutline fill="var(--dynamic_green)" />}
           header="Спасибо, тест завершен"
           action={<Button onClick={() => setActivePanel(PanelIds.Home)}>Закрыть</Button>}
-        />
+        >
+          {panelParams.current?.testName}
+        </Placeholder>
       </Group>
     </Panel>
   );
