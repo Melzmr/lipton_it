@@ -1,9 +1,11 @@
+import { Icon56UsersOutline } from '@vkontakte/icons';
 import { FC, memo, useCallback, useEffect, useState } from 'react';
+import bridge from '@vkontakte/vk-bridge';
 import {
   Button,
   Div,
   Group,
-  Headline,
+  Header,
   Panel,
   PanelHeader,
   PanelSpinner,
@@ -38,6 +40,37 @@ export const MyTests: FC<TPanel> = memo(({ id }) => {
     }
   }, []);
 
+  const copyLinkToClipboard = useCallback(async (test: TTest) => {
+    try {
+      await bridge.send('VKWebAppCopyText', { text: `https://vk.com/app8128820_6522588#test=${test._id}` });
+    } catch (e) {
+      setError(true);
+    }
+  }, []);
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     try {
+  //       const avTests: TTest[] = [];
+  //       const unavTests: TTest[] = [];
+  //
+  //       mocks.forEach((test) => {
+  //         if (test.status === 'available') {
+  //           avTests.push(test);
+  //         } else {
+  //           unavTests.push(test);
+  //         }
+  //       });
+  //
+  //       setMyTests(avTests);
+  //     } catch (e) {
+  //       setError(true);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   }, 300);
+  // }, []);
+
   useEffect(() => {
     (async function () {
       try {
@@ -46,7 +79,6 @@ export const MyTests: FC<TPanel> = memo(({ id }) => {
 
         setMyTests(tests);
       } catch (e) {
-        console.log('Error', e);
         setError(true);
       } finally {
         setLoading(false);
@@ -73,11 +105,18 @@ export const MyTests: FC<TPanel> = memo(({ id }) => {
           {loading && <PanelSpinner />}
           {!error && !loading && (
             <>
-              {!!myTests.length && (
+              {myTests.length ? (
                 <>
-                  <Headline weight="regular" style={{ paddingBottom: 24 }}>
-                    Доступные исследования
-                  </Headline>
+                  <Header
+                    mode="primary"
+                    aside={
+                      <Button mode="tertiary" onClick={() => setActivePanel(PanelIds.CreateTest)}>
+                        Создать тест
+                      </Button>
+                    }
+                  >
+                    Ваши тесты
+                  </Header>
                   {myTests.map((test) => (
                     <TestCell
                       key={test._id}
@@ -86,21 +125,39 @@ export const MyTests: FC<TPanel> = memo(({ id }) => {
                       after={
                         <Switch
                           aria-label="Включить"
+                          defaultChecked={test.status === 'available'}
                           onChange={() => {
                             onTestStatusChange(test);
                           }}
                         />
                       }
                       actions={
-                        <Button mode="secondary" onClick={() => setActivePanel(PanelIds.Test, { id: test._id })}>
-                          Пройти
-                        </Button>
+                        <>
+                          <Button mode="secondary" onClick={() => setActivePanel(PanelIds.Results, { id: test._id })}>
+                            Статистика
+                          </Button>
+
+                          <Button mode="tertiary" onClick={() => copyLinkToClipboard(test)}>
+                            Скопировать ссылку
+                          </Button>
+                        </>
                       }
                     >
                       {test.title}
                     </TestCell>
                   ))}
                 </>
+              ) : (
+                <Placeholder
+                  icon={<Icon56UsersOutline />}
+                  action={
+                    <Button size="m" onClick={() => setActivePanel(PanelIds.CreateTest)}>
+                      Создать тест
+                    </Button>
+                  }
+                >
+                  Вы не создали ни одного теста
+                </Placeholder>
               )}
             </>
           )}

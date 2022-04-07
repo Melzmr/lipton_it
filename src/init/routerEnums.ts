@@ -7,6 +7,7 @@ export enum PanelIds {
   MyTests = 'MyTests',
   Test = 'Test',
   Success = 'Success',
+  Results = 'Results',
   CreateQuestion = 'CreateQuestion',
   CreateTest = 'CreateTest',
   EditQuestion = 'EditQuestion',
