@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Questions } from './Questions';
 import { Image } from '../../components/Image';
+import { TTest } from '../../store/testsMocks';
 
 const questionsMocks: { question: string; id: number }[] = [
   {
@@ -21,13 +22,13 @@ const questionsMocks: { question: string; id: number }[] = [
   },
 ];
 
-export function FiveSecContent(): JSX.Element {
+export function FiveSecContent({ title }: TTest): JSX.Element {
   const [showQuestions, setShowQuestions] = useState(false);
   const questions = questionsMocks;
   const img = 'https://vkpay.com/index/images/desktop_header_image2x.png';
 
   return showQuestions ? (
-    <Questions questions={questions} />
+    <Questions questions={questions} title={title} />
   ) : (
     <Image
       imgUrl={img}
