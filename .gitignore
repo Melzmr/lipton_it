@@ -1,0 +1,14 @@
+.idea
+.vscode
+.awcache
+.expo
+.eslintcache
+node_modules
+docs
+.coverage
+coverage
+dist
+.DS_Store
+/tmp
+__diff_output__
+ssl
