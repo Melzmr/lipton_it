@@ -3,6 +3,7 @@ import { Button, Caption, Gallery, Headline, Radio, Subhead, Text } from '@vkont
 import { useRouterStore } from '../../store';
 import { PanelIds } from '../../init/routerEnums';
 import { Image } from '../../components/Image';
+import { TTest } from '../../store/testsMocks';
 
 function Question({
   question,
@@ -114,7 +115,7 @@ const mockQuestions: { question: string; id: number; urls: [string, string] }[] 
   },
 ];
 
-export function SideBySideContent(): JSX.Element {
+export function SideBySideContent({ title }: TTest): JSX.Element {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const setActivePanel = useRouterStore((state) => state.setActivePanel);
 
@@ -123,7 +124,7 @@ export function SideBySideContent(): JSX.Element {
     // TODO:
     // sendAnswerApi(answer);
     if (currentQuestion === mockQuestions.length - 1) {
-      setActivePanel(PanelIds.Success);
+      setActivePanel(PanelIds.Success, { testName: title });
     } else {
       setCurrentQuestion((state) => state + 1);
     }
