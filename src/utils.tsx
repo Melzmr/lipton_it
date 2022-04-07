@@ -1,5 +1,5 @@
 import { Icon56ComputerOutline, Icon56FragmentsOutline, Icon56RecentOutline } from '@vkontakte/icons';
-import { TestType } from './store/testsMocks';
+import { TestStatus, TestType } from './store/testsMocks';
 
 export const getCaption = (type: TestType): string => {
   switch (type) {
@@ -11,6 +11,19 @@ export const getCaption = (type: TestType): string => {
 
     case 'side_by_side':
       return 'Side by Side';
+  }
+};
+
+export const getAfterText = (status: TestStatus): string => {
+  switch (status) {
+    case 'available':
+      return 'Доступен';
+
+    case 'completed':
+      return 'Пройден';
+
+    case 'unavailable':
+      return 'Не пройден';
   }
 };
 
