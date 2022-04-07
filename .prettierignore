@@ -1,0 +1,3 @@
+./dist/*
+**/*/__generated__/*
+**/*/server/resolvers/resolvers-types.ts

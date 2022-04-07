@@ -9,5 +9,5 @@ ReactDOM.render(
   <StrictMode>
     <ConfigProvider />
   </StrictMode>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );

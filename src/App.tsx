@@ -8,12 +8,11 @@ import { Test } from './panels/Test/Test';
 import { Success } from './panels/Success/Success';
 import { MyTests } from './panels/MyTests/MyTests';
 
-
 export const App: FC = () => {
-  const activePanel = useRouterStore((state) => state.activePanel)
-  const activeModal = useRouterStore((state) => state.activeModal)
-  const panelsHistory = useRouterStore((state) => state.panelHistory)
-  const closePanel = useRouterStore((state) => state.closeActivePanel)
+  const activePanel = useRouterStore((state) => state.activePanel);
+  const activeModal = useRouterStore((state) => state.activeModal);
+  const panelsHistory = useRouterStore((state) => state.panelHistory);
+  const closePanel = useRouterStore((state) => state.closeActivePanel);
 
   const onSwipeBack = () => {
     if (activeModal) {
@@ -32,4 +31,3 @@ export const App: FC = () => {
     </View>
   );
 };
-

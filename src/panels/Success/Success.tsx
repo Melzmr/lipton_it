@@ -1,19 +1,26 @@
 import { FC, memo, useRef } from 'react';
+import { Icon56CheckCircleOutline } from '@vkontakte/icons';
+import { Button, Group, Panel, PanelHeader, Placeholder, Spacing } from '@vkontakte/vkui';
 import { TPanel } from '../TPanel';
-import { Button, Div, Panel, PanelHeader } from '@vkontakte/vkui';
 import { useRouterStore } from '../../store';
+import { PanelIds } from '../../init/routerEnums';
 
-export const Success: FC<TPanel>  = memo(({ id }) => {
-  const closeActivePanel = useRouterStore((state) => state.closeActivePanel);
+export const Success: FC<TPanel> = memo(({ id }) => {
+  const setActivePanel = useRouterStore((state) => state.setActivePanel);
   const panelParams = useRef(useRouterStore((state) => state.panelParams[state.panelParams.length - 1]));
   console.log(panelParams.current);
 
   return (
-      <Panel id={id}>
-        <PanelHeader>Success</PanelHeader>
-        <Div>
-          <Button onClick={closeActivePanel} size="m" stretched>Go back</Button>
-        </Div>
-      </Panel>
-  )
-})
+    <Panel id={id}>
+      <Group separator="hide">
+        <PanelHeader separator={false}>Исследования</PanelHeader>
+        <Spacing style={{ padding: 0 }} separator />
+        <Placeholder
+          icon={<Icon56CheckCircleOutline fill="var(--dynamic_green)" />}
+          header="Спасибо, тест завершен"
+          action={<Button onClick={() => setActivePanel(PanelIds.Home)}>Закрыть</Button>}
+        />
+      </Group>
+    </Panel>
+  );
+});

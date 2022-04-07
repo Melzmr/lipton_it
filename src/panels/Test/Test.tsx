@@ -1,23 +1,65 @@
-import { FC, memo, useRef } from 'react';
+import { FC, memo, useEffect, useRef, useState } from 'react';
+import { Div, Group, Panel, PanelHeader, PanelSpinner, Placeholder, Spacing, Tappable, Text } from '@vkontakte/vkui';
+import { Icon28ChevronLeftOutline } from '@vkontakte/icons';
 import { TPanel } from '../TPanel';
-import { Button, Div, Panel, PanelHeader } from '@vkontakte/vkui';
 import { useRouterStore } from '../../store';
-import { PanelIds } from '../../init/routerEnums';
+import { mocks, TTest } from '../../store/testsMocks';
+import { TestContent } from './TestContent';
+import { getCaption } from '../../utils';
 
-export const Test: FC<TPanel>  = memo(({ id }) => {
+export const Test: FC<TPanel> = memo(({ id }) => {
   const closeActivePanel = useRouterStore((state) => state.closeActivePanel);
-  const setActivePanel = useRouterStore((state) => state.setActivePanel);
   const panelParams = useRef(useRouterStore((state) => state.panelParams[state.panelParams.length - 1]));
-  console.log(panelParams.current);
+  const [testData, setTestData] = useState<TTest>();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      try {
+        const { id } = panelParams.current as { id: string };
+
+        setTestData(mocks.find((mockTest) => mockTest.id === id));
+      } catch (e) {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    }, 300);
+  }, []);
 
   return (
-      <Panel id={id}>
-        <PanelHeader>Test</PanelHeader>
-        <Div>
-          <Button onClick={() => setActivePanel(PanelIds.Success, { prop: 'success' })} size="m" stretched>Open Success</Button>
-          <Button onClick={() => setActivePanel(PanelIds.MyTests, { prop: 'myTests' })} size="m" stretched>Open MyTests</Button>
-          <Button onClick={closeActivePanel} size="m" stretched>Go back</Button>
-        </Div>
-      </Panel>
-  )
-})
+    <Panel id={id}>
+      <Group separator="hide">
+        <PanelHeader
+          separator={false}
+          left={
+            <Tappable
+              onClick={closeActivePanel}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                padding: '0 10px 2px 0',
+              }}
+            >
+              <Icon28ChevronLeftOutline fill="var(--icon_medium)" />
+              <Text weight="regular" style={{ color: 'var(--text_secondary)' }}>
+                Назад
+              </Text>
+            </Tappable>
+          }
+        >
+          {testData?.type && getCaption(testData.type)}
+        </PanelHeader>
+        <Spacing style={{ padding: 0 }} separator />
+        {error && <Placeholder>Ошибка</Placeholder>}
+        {loading && <PanelSpinner />}
+        {!error && !loading && testData && (
+          <Div>
+            <TestContent {...testData} />
+          </Div>
+        )}
+      </Group>
+    </Panel>
+  );
+});
