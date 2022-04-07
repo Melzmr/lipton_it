@@ -1,14 +1,58 @@
-import { FC, memo, useRef } from 'react';
-import { Button, Div, Group, Panel, PanelHeader, Spacing, Tabs, TabsItem } from '@vkontakte/vkui';
+import { FC, memo, useCallback, useEffect, useState } from 'react';
+import {
+  Button,
+  Div,
+  Group,
+  Headline,
+  Panel,
+  PanelHeader,
+  PanelSpinner,
+  Placeholder,
+  Spacing,
+  Switch,
+  Tabs,
+  TabsItem,
+} from '@vkontakte/vkui';
+import { fetchData } from '../../api/Api';
+import { TestCell } from '../../components/TestCell';
+import { TTest } from '../../store/testsMocks';
+import { getCaption, getIcon } from '../../utils';
 import { TPanel } from '../TPanel';
 import { useRouterStore } from '../../store';
 import { PanelIds } from '../../init/routerEnums';
 
 export const MyTests: FC<TPanel> = memo(({ id }) => {
   const setActivePanel = useRouterStore((state) => state.setActivePanel);
-  const closeActivePanel = useRouterStore((state) => state.closeActivePanel);
-  const panelParams = useRef(useRouterStore((state) => state.panelParams[state.panelParams.length - 1]));
-  console.log(panelParams.current);
+  const [myTests, setMyTests] = useState<TTest[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  const onTestStatusChange = useCallback(async (test: TTest) => {
+    try {
+      await fetchData(`/test/${test._id}`, 'PUT', {
+        ...test,
+        status: test.status === 'available' ? 'unavailable' : 'available',
+      });
+    } catch (e) {
+      setError(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    (async function () {
+      try {
+        setLoading(true);
+        const tests = await fetchData('/test/my');
+
+        setMyTests(tests);
+      } catch (e) {
+        console.log('Error', e);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
 
   return (
     <Panel id={id}>
@@ -25,9 +69,41 @@ export const MyTests: FC<TPanel> = memo(({ id }) => {
         </Div>
         <Spacing separator />
         <Div>
-          <Button onClick={closeActivePanel} size="m" stretched>
-            Go back
-          </Button>
+          {error && <Placeholder>Ошибка</Placeholder>}
+          {loading && <PanelSpinner />}
+          {!error && !loading && (
+            <>
+              {!!myTests.length && (
+                <>
+                  <Headline weight="regular" style={{ paddingBottom: 24 }}>
+                    Доступные исследования
+                  </Headline>
+                  {myTests.map((test) => (
+                    <TestCell
+                      key={test._id}
+                      caption={getCaption(test.testType)}
+                      before={getIcon(test.testType)}
+                      after={
+                        <Switch
+                          aria-label="Включить"
+                          onChange={() => {
+                            onTestStatusChange(test);
+                          }}
+                        />
+                      }
+                      actions={
+                        <Button mode="secondary" onClick={() => setActivePanel(PanelIds.Test, { id: test._id })}>
+                          Пройти
+                        </Button>
+                      }
+                    >
+                      {test.title}
+                    </TestCell>
+                  ))}
+                </>
+              )}
+            </>
+          )}
         </Div>
       </Group>
     </Panel>

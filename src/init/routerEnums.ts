@@ -1,5 +1,5 @@
 export enum ViewIds {
-  BaseFlow = 'BaseFlow'
+  BaseFlow = 'BaseFlow',
 }
 
 export enum PanelIds {

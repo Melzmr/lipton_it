@@ -29,7 +29,7 @@ const getContent = (type: TestType): { text: string; icon: JSX.Element; startCon
   }
 };
 
-export function TestContent({ title, type }: TTest): JSX.Element {
+export function TestContent({ title, testType: type }: TTest): JSX.Element {
   const { icon, text, startContent } = getContent(type);
   const [content, setContent] = useState<JSX.Element>();
   const desc = 'Пользовательское описание теста';
