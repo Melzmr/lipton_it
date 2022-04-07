@@ -1,3 +1,4 @@
+import { Icon56UsersOutline } from '@vkontakte/icons';
 import { FC, memo, useCallback, useEffect, useState } from 'react';
 import bridge from '@vkontakte/vk-bridge';
 import {
@@ -104,12 +105,12 @@ export const MyTests: FC<TPanel> = memo(({ id }) => {
           {loading && <PanelSpinner />}
           {!error && !loading && (
             <>
-              {!!myTests.length && (
+              {myTests.length ? (
                 <>
                   <Header
                     mode="primary"
                     aside={
-                      <Button mode="tertiary" onClick={() => setActivePanel(PanelIds.CreateQuestion)}>
+                      <Button mode="tertiary" onClick={() => setActivePanel(PanelIds.CreateTest)}>
                         Создать тест
                       </Button>
                     }
@@ -146,6 +147,17 @@ export const MyTests: FC<TPanel> = memo(({ id }) => {
                     </TestCell>
                   ))}
                 </>
+              ) : (
+                <Placeholder
+                  icon={<Icon56UsersOutline />}
+                  action={
+                    <Button size="m" onClick={() => setActivePanel(PanelIds.CreateTest)}>
+                      Создать тест
+                    </Button>
+                  }
+                >
+                  Вы не создали ни одного теста
+                </Placeholder>
               )}
             </>
           )}
