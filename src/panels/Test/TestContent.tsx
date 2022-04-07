@@ -7,7 +7,7 @@ import { FiveSecContent } from './FiveSecContent';
 import { SideBySideContent } from './SideBySideContent';
 
 const getContent = (testData: TTest): { text: string; icon: JSX.Element; startContent?: JSX.Element } => {
-  switch (testData.type) {
+  switch (testData.testType) {
     case 'first_click':
       return {
         text: 'Вы увидите вопрос и картинку. Нажмите на картинку в том месте, в котором считаете нужным. время не ограничено.',

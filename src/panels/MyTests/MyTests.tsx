@@ -109,7 +109,7 @@ export const MyTests: FC<TPanel> = memo(({ id }) => {
                   <Header
                     mode="primary"
                     aside={
-                      <Button mode="tertiary" onClick={() => setActivePanel(PanelIds.Home)}>
+                      <Button mode="tertiary" onClick={() => setActivePanel(PanelIds.CreateQuestion)}>
                         Создать тест
                       </Button>
                     }

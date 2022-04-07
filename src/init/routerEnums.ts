@@ -8,6 +8,9 @@ export enum PanelIds {
   Test = 'Test',
   Success = 'Success',
   Results = 'Results',
+  CreateQuestion = 'CreateQuestion',
+  CreateTest = 'CreateTest',
+  EditQuestion = 'EditQuestion',
 }
 
 export enum ModalIds {
