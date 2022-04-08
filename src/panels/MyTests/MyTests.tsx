@@ -18,7 +18,7 @@ import {
 import { fetchData } from '../../api/Api';
 import { TestCell } from '../../components/TestCell';
 import { TTest } from '../../store/testsMocks';
-import { getCaption, getIcon } from '../../utils';
+import { getCaption, getIcon, pluralString } from '../../utils';
 import { TPanel } from '../TPanel';
 import { useRouterStore } from '../../store';
 import { PanelIds } from '../../init/routerEnums';
@@ -108,11 +108,20 @@ export const MyTests: FC<TPanel> = memo(({ id }) => {
                   >
                     Ваши тесты
                   </Header>
-                  {myTests.map((test) => (
+                  {myTests.map((test: TTest) => (
                     <TestCell
                       key={test._id}
                       caption={getCaption(test.testType)}
                       before={getIcon(test.testType)}
+                      text={
+                        test.counter != null &&
+                        `${test.counter} ${pluralString(
+                          test.counter,
+                          'человек прошёл',
+                          'человека прошло',
+                          'человек прошло',
+                        )}`
+                      }
                       after={
                         <Switch
                           aria-label="Включить"

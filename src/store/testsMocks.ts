@@ -9,6 +9,8 @@ export type TTest = {
   title: string;
   status: TestStatus;
   createdAt: string;
+  counter?: number;
+  completed?: boolean;
 };
 
 export type ISODate = string;
