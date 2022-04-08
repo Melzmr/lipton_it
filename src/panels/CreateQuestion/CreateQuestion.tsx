@@ -14,10 +14,16 @@ export const CreateQuestion: FC<TPanel> = memo(({ id }) => {
   const testType = useCreateTestStore((state) => state.type);
 
   const handleSave = () => {
-    if (title && href) {
+    if (title && href && ((testType === 'side_by_side' && href2) || testType !== 'side_by_side')) {
+      const data: [string, string?] = [href];
+
+      if (href2) {
+        data.push(href2);
+      }
+
       appendQuestion({
         title,
-        data: [href, href2],
+        data,
       });
       closeActivePanel();
     }

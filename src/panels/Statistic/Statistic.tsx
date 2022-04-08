@@ -104,7 +104,7 @@ export const Statistic: FC<TPanel> = memo(({ id }) => {
             </Tappable>
           }
         >
-          Исследования
+          {results?.title}
         </PanelHeader>
         <Spacing style={{ padding: 0 }} separator />
         <Div>{renderStatistic()}</Div>

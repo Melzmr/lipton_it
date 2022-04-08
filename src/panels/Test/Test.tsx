@@ -5,7 +5,6 @@ import { TPanel } from '../TPanel';
 import { useRouterStore } from '../../store';
 import { TTestData } from '../../store/testsMocks';
 import { TestContent } from './TestContent';
-import { getCaption } from '../../utils';
 import { fetchData } from '../../api/Api';
 
 export const Test: FC<TPanel> = memo(({ id }) => {
@@ -50,7 +49,7 @@ export const Test: FC<TPanel> = memo(({ id }) => {
             </Tappable>
           }
         >
-          {testData?.testType && getCaption(testData.testType)}
+          {testData?.title}
         </PanelHeader>
         <Spacing style={{ padding: 0 }} separator />
         {error && <Placeholder>Ошибка, такого теста не существует</Placeholder>}

@@ -49,8 +49,8 @@ export const Home: React.FC<TPanel> = memo(({ id }) => {
       try {
         const avTests = await fetchData('/test');
         const historyTests = await fetchData('/test/history');
-        setAvailableTests(avTests);
-        setUnavailableTests(historyTests);
+        setAvailableTests(avTests.reverse());
+        setUnavailableTests(historyTests.reverse());
       } catch (e) {
         setError(true);
       } finally {
