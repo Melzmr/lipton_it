@@ -52,5 +52,10 @@ export const fetchData = async (url = '', method: FetchOptions['method'] = 'GET'
 
   const response = await fetch(`https://lipton-it.herokuapp.com/api${url}`, options);
 
-  return response.json(); // parses JSON response into native JavaScript objects
+  const contentType = response.headers.get('content-type');
+  if (contentType && contentType.indexOf('application/json') !== -1) {
+    return response.json();
+  }
+
+  return response.text();
 };

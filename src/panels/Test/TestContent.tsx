@@ -1,12 +1,12 @@
 import { Button, Placeholder } from '@vkontakte/vkui';
 import { Icon56ComputerOutline, Icon56FragmentsOutline, Icon56RecentOutline } from '@vkontakte/icons';
 import { useState } from 'react';
-import { TTest } from '../../store/testsMocks';
+import { TTestData } from '../../store/testsMocks';
 import { FirstClickContent } from './FirstClickContent';
 import { FiveSecContent } from './FiveSecContent';
 import { SideBySideContent } from './SideBySideContent';
 
-const getContent = (testData: TTest): { text: string; icon: JSX.Element; startContent?: JSX.Element } => {
+const getContent = (testData: TTestData): { text: string; icon: JSX.Element; startContent?: JSX.Element } => {
   switch (testData.testType) {
     case 'first_click':
       return {
@@ -29,24 +29,20 @@ const getContent = (testData: TTest): { text: string; icon: JSX.Element; startCo
   }
 };
 
-export function TestContent(testData: TTest): JSX.Element {
+export function TestContent(testData: TTestData): JSX.Element {
   const { icon, text, startContent } = getContent(testData);
   const [content, setContent] = useState<JSX.Element>();
-  const desc = 'Пользовательское описание теста';
+  const { title, description } = testData;
 
   return (
     content || (
-      <Placeholder
-        icon={icon}
-        action={<Button onClick={() => setContent(startContent)}>Начать</Button>}
-        header={testData.title}
-      >
+      <Placeholder icon={icon} action={<Button onClick={() => setContent(startContent)}>Начать</Button>} header={title}>
         {text}
-        {desc && (
+        {description && (
           <>
             <br />
             <br />
-            {desc}
+            {description}
           </>
         )}
       </Placeholder>

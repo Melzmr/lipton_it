@@ -3,29 +3,30 @@ import { Div, Group, Panel, PanelHeader, PanelSpinner, Placeholder, Spacing, Tap
 import { Icon28ChevronLeftOutline } from '@vkontakte/icons';
 import { TPanel } from '../TPanel';
 import { useRouterStore } from '../../store';
-import { mocks, TTest } from '../../store/testsMocks';
+import { TTestData } from '../../store/testsMocks';
 import { TestContent } from './TestContent';
 import { getCaption } from '../../utils';
+import { fetchData } from '../../api/Api';
 
 export const Test: FC<TPanel> = memo(({ id }) => {
   const closeActivePanel = useRouterStore((state) => state.closeActivePanel);
   const panelParams = useRef(useRouterStore((state) => state.panelParams[state.panelParams.length - 1]));
-  const [testData, setTestData] = useState<TTest>();
+  const [testData, setTestData] = useState<TTestData>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => {
+    (async () => {
       try {
         const { id } = panelParams.current as { id: string };
-
-        setTestData(mocks.find((mockTest) => mockTest._id === id));
+        const test = await fetchData(`/test/${id}`);
+        setTestData(test);
       } catch (e) {
         setError(true);
       } finally {
         setLoading(false);
       }
-    }, 300);
+    })();
   }, []);
 
   return (

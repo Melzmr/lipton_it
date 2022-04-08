@@ -11,6 +11,27 @@ export type TTest = {
   createdAt: string;
 };
 
+export type ISODate = string;
+
+export type TestQuestion = {
+  description: string;
+  testId: string;
+  title: string;
+  _id: string;
+  data: [string, string?];
+};
+
+export type TTestData = {
+  createdAt: ISODate;
+  description: string;
+  questions: TestQuestion[];
+  status: TestStatus;
+  testType: TestType;
+  title: string;
+  userId: string;
+  _id: string;
+};
+
 export const mocks: TTest[] = [
   {
     _id: '1',

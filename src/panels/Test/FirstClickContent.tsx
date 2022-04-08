@@ -3,31 +3,31 @@ import { Button, Headline, Subhead } from '@vkontakte/vkui';
 import { useRouterStore } from '../../store';
 import { PanelIds } from '../../init/routerEnums';
 import { Image } from '../../components/Image';
-import { TTest } from '../../store/testsMocks';
+import { TestQuestion, TTestData } from '../../store/testsMocks';
+import { fetchData } from '../../api/Api';
 
 function Question({
-  question,
-  id,
+  title,
+  data,
+  index,
   len,
-  url,
   onClick,
-}: {
-  question: string;
-  id: number;
+  _id,
+}: TestQuestion & {
+  index: number;
   len: number;
-  url: string;
-  onClick: (answer: string) => void;
+  onClick: (answer: string, questionId: string) => void;
 }): JSX.Element {
   return (
     <>
       <Subhead style={{ color: 'var(--text_secondary)', paddingBottom: 2 }}>
-        Вопрос {id + 1} из {len}
+        Вопрос {index + 1} из {len}
       </Subhead>
-      <Headline weight="regular">{question}</Headline>
+      <Headline weight="regular">{title}</Headline>
       <Image
-        imgUrl={url}
-        onClick={(e) => {
-          onClick(`${e.clientX}|${e.clientY}`);
+        imgUrl={data[0]}
+        onClick={(e, left, top) => {
+          onClick(`${e.clientX - (left ?? 0)}|${e.clientY - (top ?? 0)}`, _id);
         }}
         style={{ marginTop: 24, width: '100%' }}
       />
@@ -40,38 +40,23 @@ function Question({
   );
 }
 
-const mockQuestions = [
-  {
-    id: 0,
-    question: 'Куда бы вы нажали, чтобы увидеть полный список сервисов?',
-    url: 'https://vkpay.com/index/images/desktop_header_image2x.png',
-  },
-  {
-    id: 1,
-    question: 'Куда бы вы нажали, чтобы увидеть полный список сервисов?',
-    url: 'https://vkpay.com/index/images/desktop_header_image2x.png',
-  },
-  {
-    id: 2,
-    question: 'Куда бы вы нажали, чтобы увидеть полный список сервисов?',
-    url: 'https://vkpay.com/index/images/desktop_header_image2x.png',
-  },
-];
-
-export function FirstClickContent({ title }: TTest): JSX.Element {
+export function FirstClickContent({ title, questions }: TTestData): JSX.Element {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const setActivePanel = useRouterStore((state) => state.setActivePanel);
 
-  const handleOnClick = (answer: string) => {
-    console.log(answer);
-    // TODO:
-    // sendAnswerApi(answer);
-    if (currentQuestion === mockQuestions.length - 1) {
+  const handleOnClick = async (answer: string, questionId: string) => {
+    await fetchData('/results', 'POST', {
+      questionId,
+      data: answer,
+    });
+    if (currentQuestion === questions.length - 1) {
       setActivePanel(PanelIds.Success, { testName: title });
     } else {
       setCurrentQuestion((state) => state + 1);
     }
   };
 
-  return <Question {...mockQuestions[currentQuestion]} len={mockQuestions.length} onClick={handleOnClick} />;
+  return (
+    <Question {...questions[currentQuestion]} index={currentQuestion} len={questions.length} onClick={handleOnClick} />
+  );
 }

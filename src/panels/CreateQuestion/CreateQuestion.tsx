@@ -1,43 +1,23 @@
-import { ChangeEvent, FC, memo, useRef, useState } from 'react';
-import { Icon24Document, Icon28ChevronLeftOutline } from '@vkontakte/icons';
-import { Button, File, FormItem, Group, Input, Panel, PanelHeader, Spacing, Tappable, Text } from '@vkontakte/vkui';
+import { FC, memo, useState } from 'react';
+import { Icon28ChevronLeftOutline } from '@vkontakte/icons';
+import { Button, FormItem, Group, Input, Panel, PanelHeader, Spacing, Tappable, Text } from '@vkontakte/vkui';
 import { TPanel } from '../TPanel';
 import { useRouterStore } from '../../store';
-import { TestType } from '../../store/testsMocks';
 import { useCreateTestStore } from '../../store/createTestStore';
 
 export const CreateQuestion: FC<TPanel> = memo(({ id }) => {
   const [title, setTitle] = useState<string>();
-  // const [img, setImg] = useState<any>();
-  // const [img2, setImg2] = useState<any>();
-  const fileRef = useRef<HTMLInputElement>(null);
-  const file2Ref = useRef<HTMLInputElement>(null);
-  // const setActivePanel = useRouterStore((state) => state.setActivePanel);
+  const [href, setHref] = useState<string>();
+  const [href2, setHref2] = useState<string>();
   const closeActivePanel = useRouterStore((state) => state.closeActivePanel);
   const appendQuestion = useCreateTestStore((state) => state.appendQuestion);
-  const panelProps = useRef<{ testType: TestType }>(
-    useRouterStore((state) => state.panelParams[state.panelParams.length - 1]) as { testType: TestType },
-  );
-  const { testType } = panelProps.current ?? {};
-
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      // TODO: send to album
-      console.log(event.target?.result);
-    };
-
-    reader.readAsText(file);
-  };
+  const testType = useCreateTestStore((state) => state.type);
 
   const handleSave = () => {
-    if (title) {
+    if (title && href) {
       appendQuestion({
-        question: title,
-        // TODO
-        urls: ['TODO'],
+        title,
+        data: [href, href2],
       });
       closeActivePanel();
     }
@@ -76,24 +56,14 @@ export const CreateQuestion: FC<TPanel> = memo(({ id }) => {
         </FormItem>
         <div style={{ display: 'flex' }}>
           <FormItem top="Картинка">
-            <File
-              getRef={fileRef}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => handleFileChange(e)}
-              accept="image/png, image/jpeg"
-              before={<Icon24Document />}
-              controlSize="m"
-              mode="secondary"
-            />
+            <Input value={href} onChange={(ev) => setHref(ev.target.value)} placeholder="Введите ссылку на картинку" />
           </FormItem>
           {testType === 'side_by_side' && (
-            <FormItem top="Картинка">
-              <File
-                getRef={file2Ref}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => handleFileChange(e)}
-                accept="image/png, image/jpeg"
-                before={<Icon24Document />}
-                controlSize="m"
-                mode="secondary"
+            <FormItem top="Вторая картинка">
+              <Input
+                value={href2}
+                onChange={(ev) => setHref2(ev.target.value)}
+                placeholder="Введите ссылку на вторую картинку"
               />
             </FormItem>
           )}
@@ -102,7 +72,9 @@ export const CreateQuestion: FC<TPanel> = memo(({ id }) => {
           <Button mode="secondary" style={{ marginRight: 10 }} onClick={closeActivePanel}>
             Не сохранять
           </Button>
-          <Button onClick={handleSave}>Сохранить</Button>
+          <Button onClick={handleSave} disabled={!title || !href}>
+            Сохранить
+          </Button>
         </div>
       </Group>
     </Panel>

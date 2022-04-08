@@ -9,7 +9,11 @@ export function Image({
 }: {
   imgUrl: string;
   onLoadCallback?: () => void;
-} & React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>): JSX.Element {
+  onClick?: (e: React.MouseEvent<HTMLImageElement>, left?: number, top?: number) => void;
+} & Omit<
+  React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>,
+  'onClick'
+>): JSX.Element {
   const imgRef = useRef<HTMLImageElement>(null);
   const [imgIsLoaded, setImgIsLoaded] = useState(false);
   const onLoadCallbackRef = useRef(onLoadCallback).current;
@@ -35,7 +39,18 @@ export function Image({
   return (
     <>
       {!imgIsLoaded && <PanelSpinner />}
-      <img ref={imgRef} src={imgUrl} width="100%" alt="" onClick={onClick} {...rest} />
+      <img
+        ref={imgRef}
+        src={imgUrl}
+        width="100%"
+        alt=""
+        onClick={(e) => {
+          const { left, top } = imgRef.current?.getBoundingClientRect() ?? {};
+
+          onClick?.(e, left, top);
+        }}
+        {...rest}
+      />
     </>
   );
 }

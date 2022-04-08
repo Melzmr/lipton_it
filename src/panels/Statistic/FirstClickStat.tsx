@@ -1,4 +1,4 @@
-import { Div, Spacing, Subhead, Headline } from '@vkontakte/vkui';
+import { Headline, Spacing, Subhead } from '@vkontakte/vkui';
 import { Image } from '../../components/Image';
 import type { IQuestionWithResults } from './Statistic';
 
@@ -36,21 +36,19 @@ export const FirstClickStat = ({ question, title, sep }: TSideBySideStatProps) =
     <>
       {sep && <Spacing separator size={12} />}
 
-      <Div>
-        <Subhead style={{ color: 'var(--text_secondary)', paddingBottom: 4 }}>{title}</Subhead>
-        <Headline weight="regular">{question.title}</Headline>
-        <Spacing size={16} />
-        <div style={{ position: 'relative' }}>
-          <div style={{ position: 'absolute', width: '100%', height: '100%', left: 0, top: 0 }}>
-            {question.results.map((res) => {
-              const [x, y] = res.data.split('|');
+      <Subhead style={{ color: 'var(--text_secondary)', paddingBottom: 4 }}>{title}</Subhead>
+      <Headline weight="regular">{question.title}</Headline>
+      <Spacing size={16} />
+      <div style={{ position: 'relative' }}>
+        <div style={{ position: 'absolute', width: '100%', height: '100%', left: 0, top: 0 }}>
+          {question.results.map((res) => {
+            const [x, y] = res.data.split('|');
 
-              return <Bullet x={+x} y={+y} key={res.data} />;
-            })}
-          </div>
-          <Image imgUrl={question.data?.[0]} style={{ borderRadius: '8px' }} />
+            return <Bullet x={+x} y={+y} key={res.data} />;
+          })}
         </div>
-      </Div>
+        <Image imgUrl={question.data?.[0]} style={{ borderRadius: '8px' }} />
+      </div>
     </>
   );
 };

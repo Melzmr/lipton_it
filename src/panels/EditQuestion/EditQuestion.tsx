@@ -1,5 +1,5 @@
 import { FC, memo, useRef, useState } from 'react';
-import { Icon28ChevronLeftOutline } from '@vkontakte/icons';
+import { Icon20TrashSmileOutline, Icon28ChevronLeftOutline } from '@vkontakte/icons';
 import {
   Button,
   Div,
@@ -21,12 +21,14 @@ import { useCreateTestStore } from '../../store/createTestStore';
 import { getCaption } from '../../utils';
 import { PanelIds } from '../../init/routerEnums';
 import { TestCell } from '../../components/TestCell';
+import { fetchData } from '../../api/Api';
 
 export const EditQuestion: FC<TPanel> = memo(({ id }) => {
   const closeActivePanel = useRouterStore((state) => state.closeActivePanel);
   const setActivePanel = useRouterStore((state) => state.setActivePanel);
   const testType = useCreateTestStore((state) => state.type);
   const clearAll = useCreateTestStore((state) => state.clearAll);
+  const deleteQuestion = useCreateTestStore((state) => state.deleteQuestion);
   const updateName = useCreateTestStore((state) => state.updateName);
   const name = useCreateTestStore((state) => state.name);
   const descriptionFromStore = useCreateTestStore((state) => state.description);
@@ -39,10 +41,16 @@ export const EditQuestion: FC<TPanel> = memo(({ id }) => {
   const [title, setTitle] = useState<string>(name ?? '');
   const [description, setDescription] = useState<string>(descriptionFromStore ?? '');
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (questions?.length && questions.length > 0 && description && title) {
       // TODO API CREATE TEST
-      // sendBlahBlahBlah
+      await fetchData('/test', 'POST', {
+        title,
+        testType,
+        status: 'available',
+        description,
+        questions,
+      });
       // TODO isEditing = true THEN PUT
       // PUT BALHBALBLA
       clearAll();
@@ -104,9 +112,16 @@ export const EditQuestion: FC<TPanel> = memo(({ id }) => {
           )}
         </Div>
         <div style={isEditing ? { opacity: 0.4 } : {}}>
-          {questions?.map(({ question, urls }) => (
-            <TestCell caption={urls.length === 1 ? '1 картинка' : urls.length === 2 ? '2 картинки' : '0 картинок'}>
-              {question}
+          {questions?.map(({ title, data }, idx) => (
+            <TestCell
+              caption={data.length === 1 ? '1 картинка' : data.length === 2 ? '2 картинки' : '0 картинок'}
+              after={
+                <Tappable onClick={() => deleteQuestion(idx)}>
+                  <Icon20TrashSmileOutline fill="var(--icon_medium)" />
+                </Tappable>
+              }
+            >
+              {title}
             </TestCell>
           ))}
         </div>

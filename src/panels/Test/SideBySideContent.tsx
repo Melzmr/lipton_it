@@ -3,29 +3,29 @@ import { Button, Caption, Gallery, Headline, Radio, Subhead, Text } from '@vkont
 import { useRouterStore } from '../../store';
 import { PanelIds } from '../../init/routerEnums';
 import { Image } from '../../components/Image';
-import { TTest } from '../../store/testsMocks';
+import { TestQuestion, TTestData } from '../../store/testsMocks';
+import { fetchData } from '../../api/Api';
 
 function Question({
-  question,
-  id,
+  title,
+  index,
   len,
-  urls,
+  data,
+  _id,
   onClick,
-}: {
-  question: string;
-  id: number;
+}: TestQuestion & {
+  index: number;
   len: number;
-  urls: [string, string];
-  onClick: (answer: 0 | 1) => void;
+  onClick: (answer: 0 | 1, questionId: string) => void;
 }): JSX.Element {
   const [selected, setSelected] = useState<0 | 1>(0);
 
   return (
     <>
       <Subhead style={{ color: 'var(--text_secondary)' }}>
-        Вопрос {id + 1} из {len}
+        Вопрос {index + 1} из {len}
       </Subhead>
-      <Headline weight="regular">{question}</Headline>
+      <Headline weight="regular">{title}</Headline>
       <Caption style={{ paddingTop: 6, color: 'var(--text_secondary)' }}>
         (кликните по картинке, чтобы увеличить)
       </Caption>
@@ -38,16 +38,16 @@ function Question({
         style={{ marginTop: 24 }}
       >
         <div>
-          <a target="_blank" href={urls[0]} rel="noreferrer" style={{ display: 'block', marginRight: 12 }}>
-            <Image imgUrl={urls[0]} />
+          <a target="_blank" href={data[0]} rel="noreferrer" style={{ display: 'block', marginRight: 12 }}>
+            <Image imgUrl={data[0]} />
           </a>
           <Text weight="regular" style={{ color: 'var(--text_secondary)', paddingTop: 12 }}>
             1 вариант
           </Text>
         </div>
         <div>
-          <a target="_blank" href={urls[1]} rel="noreferrer" style={{ display: 'block', marginRight: 12 }}>
-            <Image imgUrl={urls[1]} />
+          <a target="_blank" href={data[1]} rel="noreferrer" style={{ display: 'block', marginRight: 12 }}>
+            <Image imgUrl={data[1] ?? ''} />
           </a>
           <Text weight="regular" style={{ color: 'var(--text_secondary)', paddingTop: 12 }}>
             2 вариант
@@ -70,65 +70,33 @@ function Question({
           style={{ marginTop: 24 }}
           onClick={() => {
             setSelected(0);
-            onClick(selected);
+            onClick(selected, _id);
           }}
         >
-          Следующий вопрос
+          {index === len - 1 ? 'Завершить тест' : 'Следующий вопрос'}
         </Button>
       </div>
     </>
   );
 }
 
-const mockQuestions: { question: string; id: number; urls: [string, string] }[] = [
-  {
-    id: 0,
-    question: 'Какой дизайн красивее?))',
-    urls: [
-      'https://vkpay.com/index/images/desktop_header_image2x.png',
-      'https://vkpay.com/index/images/desktop_header_image2x.png',
-    ],
-  },
-  {
-    id: 1,
-    question: 'Какой дизайн красивее?))',
-    urls: [
-      'https://vkpay.com/index/images/desktop_header_image2x.png',
-      'https://vkpay.com/index/images/desktop_header_image2x.png',
-    ],
-  },
-  {
-    id: 2,
-    question: 'Какой дизайн красивее?))',
-    urls: [
-      'https://vkpay.com/index/images/desktop_header_image2x.png',
-      'https://vkpay.com/index/images/desktop_header_image2x.png',
-    ],
-  },
-  {
-    id: 3,
-    question: 'Какой дизайн красивее?))',
-    urls: [
-      'https://vkpay.com/index/images/desktop_header_image2x.png',
-      'https://vkpay.com/index/images/desktop_header_image2x.png',
-    ],
-  },
-];
-
-export function SideBySideContent({ title }: TTest): JSX.Element {
+export function SideBySideContent({ title, questions }: TTestData): JSX.Element {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const setActivePanel = useRouterStore((state) => state.setActivePanel);
 
-  const handleOnClick = (answer: 0 | 1) => {
-    console.log(answer);
-    // TODO:
-    // sendAnswerApi(answer);
-    if (currentQuestion === mockQuestions.length - 1) {
+  const handleOnClick = async (answer: 0 | 1, questionId: string) => {
+    await fetchData('/results', 'POST', {
+      questionId,
+      data: `${answer}`,
+    });
+    if (currentQuestion === questions.length - 1) {
       setActivePanel(PanelIds.Success, { testName: title });
     } else {
       setCurrentQuestion((state) => state + 1);
     }
   };
 
-  return <Question {...mockQuestions[currentQuestion]} len={mockQuestions.length} onClick={handleOnClick} />;
+  return (
+    <Question {...questions[currentQuestion]} index={currentQuestion} len={questions.length} onClick={handleOnClick} />
+  );
 }

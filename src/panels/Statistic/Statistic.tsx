@@ -1,13 +1,14 @@
 import { FC, memo, useCallback, useEffect, useRef, useState } from 'react';
-import { Div, Group, Panel, PanelHeader, Spacing, Tabs, TabsItem } from '@vkontakte/vkui';
+import { Div, Group, Panel, PanelHeader, Spacing, Tappable, Text } from '@vkontakte/vkui';
+import { Icon28ChevronLeftOutline } from '@vkontakte/icons';
 import { TPanel } from '../TPanel';
 import { useRouterStore } from '../../store';
-import { PanelIds } from '../../init/routerEnums';
 
 import { TTest } from '../../store/testsMocks';
 import { SideBySideStat } from './SideBySideStat';
 import { FirstClickStat } from './FirstClickStat';
 import { FiveSecStat } from './FiveSecStat';
+import { fetchData } from '../../api/Api';
 
 export type TQuestion = {
   _id: string;
@@ -33,7 +34,7 @@ export interface IStatistic extends TTest {
 }
 
 export const Statistic: FC<TPanel> = memo(({ id }) => {
-  const setActivePanel = useRouterStore((state) => state.setActivePanel);
+  const closeActivePanel = useRouterStore((state) => state.closeActivePanel);
   const panelParams = useRef(useRouterStore((state) => state.panelParams[state.panelParams.length - 1]));
 
   const [results, setResults] = useState<IStatistic | null>(null);
@@ -42,42 +43,8 @@ export const Statistic: FC<TPanel> = memo(({ id }) => {
     const testId = panelParams.current?.testId as string;
 
     const getResults = async (testId: string) => {
-      console.log(testId);
-      setResults({
-        testType: 'five_sec',
-        questions: [
-          {
-            title: 'Что видели, что слышали?',
-            data: ['https://vkpay.com/index/images/desktop_header_image2x.png'],
-            results: [
-              { data: 'На нос 🤡', createdAt: '2022-04-07T21:22:41.617Z' },
-              { data: 'На нос 🤡', createdAt: '2022-04-07T21:22:41.617Z' },
-              { data: 'На нос 🤡', createdAt: '2022-04-07T21:22:41.617Z' },
-              { data: 'На нос 🤡', createdAt: '2022-04-07T21:22:41.617Z' },
-            ],
-          },
-          {
-            title: 'Что видели, что слышали?',
-            data: ['https://vkpay.com/index/images/desktop_header_image2x.png'],
-            results: [
-              { data: 'На нос 🤡', createdAt: '2022-04-07T21:22:41.617Z' },
-              { data: 'На нос 🤡', createdAt: '2022-04-07T21:22:41.617Z' },
-              { data: 'На нос 🤡', createdAt: '2022-04-07T21:22:41.617Z' },
-              { data: 'На нос 🤡', createdAt: '2022-04-07T21:22:41.617Z' },
-            ],
-          },
-          {
-            title: 'Что видели, что слышали?',
-            data: ['https://vkpay.com/index/images/desktop_header_image2x.png'],
-            results: [
-              { data: 'На нос 🤡', createdAt: '2022-04-07T21:22:41.617Z' },
-              { data: 'На нос 🤡', createdAt: '2022-04-07T21:22:41.617Z' },
-              { data: 'На нос 🤡', createdAt: '2022-04-07T21:22:41.617Z' },
-              { data: 'На нос 🤡', createdAt: '2022-04-07T21:22:41.617Z' },
-            ],
-          },
-        ],
-      } as IStatistic);
+      const data: IStatistic = await fetchData(`/results/${testId}`);
+      setResults(data);
     };
 
     getResults(testId);
@@ -119,17 +86,27 @@ export const Statistic: FC<TPanel> = memo(({ id }) => {
   return (
     <Panel id={id}>
       <Group separator="hide">
-        <PanelHeader separator={false}>Исследования</PanelHeader>
+        <PanelHeader
+          separator={false}
+          left={
+            <Tappable
+              onClick={closeActivePanel}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                padding: '0 10px 2px 0',
+              }}
+            >
+              <Icon28ChevronLeftOutline fill="var(--icon_medium)" />
+              <Text weight="regular" style={{ color: 'var(--text_secondary)' }}>
+                Назад
+              </Text>
+            </Tappable>
+          }
+        >
+          Исследования
+        </PanelHeader>
         <Spacing style={{ padding: 0 }} separator />
-        <Div style={{ paddingTop: 0, paddingBottom: 0 }}>
-          <Tabs>
-            <TabsItem onClick={() => setActivePanel(PanelIds.Home)} selected={false}>
-              Главная
-            </TabsItem>
-            <TabsItem selected>Мои исследования</TabsItem>
-          </Tabs>
-        </Div>
-        <Spacing separator />
         <Div>{renderStatistic()}</Div>
       </Group>
     </Panel>

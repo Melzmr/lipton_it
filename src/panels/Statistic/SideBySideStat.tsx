@@ -1,4 +1,4 @@
-import { Div, Link, Spacing, Subhead, Headline, Progress } from '@vkontakte/vkui';
+import { Div, Headline, Link, Progress, Spacing, Subhead } from '@vkontakte/vkui';
 import { Image } from '../../components/Image';
 import type { IQuestionWithResults } from './Statistic';
 
@@ -39,7 +39,7 @@ export const SideBySideStat = ({ question, title, sep }: TSideBySideStatProps) =
         <Spacing size={16} />
         <div style={{ display: 'flex', alignItems: 'center', gridGap: '16px' }}>
           {question.data.map((image, idx) => (
-            <Link key={`${image}_${idx}`} href={image} target="_blank">
+            <Link key={`${image}_${idx}`} href={image} target="_blank" style={{ width: '50%' }}>
               <Image imgUrl={image} style={{ borderRadius: '8px' }} />
             </Link>
           ))}

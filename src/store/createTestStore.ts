@@ -2,8 +2,9 @@ import create from 'zustand';
 import { TestType } from './testsMocks';
 
 export type CreateTestQuestion = {
-  question: string;
-  urls: [string, string?];
+  title: string;
+  description?: string;
+  data: [string, string?];
 };
 
 type CreateTestStore = {

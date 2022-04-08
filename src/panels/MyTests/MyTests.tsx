@@ -48,6 +48,21 @@ export const MyTests: FC<TPanel> = memo(({ id }) => {
     }
   }, []);
 
+  const deleteTest = async (test: TTest) => {
+    try {
+      await fetchData(`/test/${test._id}`, 'DELETE');
+      try {
+        const tests = await fetchData('/test/my');
+
+        setMyTests(tests);
+      } catch (e) {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    } catch (e) {}
+  };
+
   useEffect(() => {
     (async function () {
       try {
@@ -118,6 +133,14 @@ export const MyTests: FC<TPanel> = memo(({ id }) => {
 
                           <Button mode="tertiary" onClick={() => copyLinkToClipboard(test)}>
                             Скопировать ссылку
+                          </Button>
+
+                          <Button
+                            mode="tertiary"
+                            style={{ color: 'var(--destructive)' }}
+                            onClick={() => deleteTest(test)}
+                          >
+                            Удалить тест
                           </Button>
                         </>
                       }

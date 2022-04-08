@@ -1,27 +1,49 @@
 import { Button, Headline, Subhead, Textarea } from '@vkontakte/vkui';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouterStore } from '../../store';
 import { PanelIds } from '../../init/routerEnums';
+import { TestQuestion } from '../../store/testsMocks';
+import { Image } from '../../components/Image';
+import { fetchData } from '../../api/Api';
 
 function Question({
-  question,
-  id,
+  title,
+  data,
+  _id,
   len,
   onClick,
-}: {
-  question: string;
-  id: number;
+  index,
+}: TestQuestion & {
   len: number;
-  onClick: (answer: string) => void;
+  onClick: (answer: string, questionId: string) => void;
+  index: number;
 }) {
   const [value, setValue] = useState<string>();
+  const [showImage, setShowImage] = useState(true);
 
-  return (
+  useEffect(
+    () => () => {
+      setValue('');
+      setShowImage(true);
+    },
+    [index],
+  );
+
+  return showImage ? (
+    <Image
+      imgUrl={data[0]}
+      onLoadCallback={() =>
+        setTimeout(() => {
+          setShowImage(false);
+        }, 5000)
+      }
+    />
+  ) : (
     <>
       <Subhead style={{ color: 'var(--text_secondary)', paddingBottom: 2 }}>
-        Вопрос {id + 1} из {len}
+        Вопрос {index + 1} из {len}
       </Subhead>
-      <Headline weight="regular">{question}</Headline>
+      <Headline weight="regular">{title}</Headline>
       <Subhead style={{ color: 'var(--text_secondary)', paddingTop: 24, paddingBottom: 6 }}>Ответ</Subhead>
       <Textarea onChange={(ev) => setValue(ev.target.value)} value={value} placeholder="Напишите развёрнуто..." />
       <div style={{ textAlign: 'right' }}>
@@ -29,33 +51,27 @@ function Question({
           disabled={!value}
           onClick={() => {
             if (value) {
-              setValue('');
-              onClick(value);
+              onClick(value, _id);
             }
           }}
           style={{ marginTop: 24 }}
         >
-          Следующий вопрос
+          {index === len - 1 ? 'Завершить тест' : 'Следующий вопрос'}
         </Button>
       </div>
     </>
   );
 }
 
-export function Questions({
-  questions,
-  title,
-}: {
-  questions: { question: string; id: number }[];
-  title: string;
-}): JSX.Element {
+export function Questions({ questions, title }: { questions: TestQuestion[]; title: string }): JSX.Element {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const setActivePanel = useRouterStore((state) => state.setActivePanel);
 
-  const handleOnClick = (answer: string) => {
-    console.log(answer);
-    // TODO:
-    // sendAnswerApi(answer);
+  const handleOnClick = async (answer: string, questionId: string) => {
+    await fetchData('/results', 'POST', {
+      questionId,
+      data: answer,
+    });
     if (currentQuestion === questions.length - 1) {
       setActivePanel(PanelIds.Success, { testName: title });
     } else {
@@ -63,5 +79,7 @@ export function Questions({
     }
   };
 
-  return <Question {...questions[currentQuestion]} len={questions.length} onClick={handleOnClick} />;
+  return (
+    <Question {...questions[currentQuestion]} index={currentQuestion} len={questions.length} onClick={handleOnClick} />
+  );
 }
