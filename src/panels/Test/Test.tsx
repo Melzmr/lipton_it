@@ -49,7 +49,7 @@ export const Test: FC<TPanel> = memo(({ id }) => {
             </Tappable>
           }
         >
-          {testData?.type && getCaption(testData.type)}
+          {testData?.testType && getCaption(testData.testType)}
         </PanelHeader>
         <Spacing style={{ padding: 0 }} separator />
         {error && <Placeholder>Ошибка</Placeholder>}

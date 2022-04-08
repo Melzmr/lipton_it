@@ -6,7 +6,6 @@ import { PanelIds } from '../../init/routerEnums';
 
 export const MyTests: FC<TPanel> = memo(({ id }) => {
   const setActivePanel = useRouterStore((state) => state.setActivePanel);
-  const closeActivePanel = useRouterStore((state) => state.closeActivePanel);
   const panelParams = useRef(useRouterStore((state) => state.panelParams[state.panelParams.length - 1]));
   console.log(panelParams.current);
 
@@ -25,8 +24,14 @@ export const MyTests: FC<TPanel> = memo(({ id }) => {
         </Div>
         <Spacing separator />
         <Div>
-          <Button onClick={closeActivePanel} size="m" stretched>
-            Go back
+          <Button
+            onClick={() => {
+              setActivePanel(PanelIds.Statistic, { testId: '624f548a8e8b3b77b19500aa' });
+            }}
+            size="m"
+            stretched
+          >
+            test
           </Button>
         </Div>
       </Group>

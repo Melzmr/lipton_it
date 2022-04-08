@@ -7,6 +7,7 @@ export enum PanelIds {
   MyTests = 'MyTests',
   Test = 'Test',
   Success = 'Success',
+  Statistic = 'Statistic',
 }
 
 export enum ModalIds {

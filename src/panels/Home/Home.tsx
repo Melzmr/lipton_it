@@ -124,11 +124,11 @@ export const Home: React.FC<TPanel> = memo(({ id }) => {
                   <Headline weight="regular" style={{ paddingBottom: 24 }}>
                     Доступные исследования
                   </Headline>
-                  {availableTests.map(({ id, type, title, status }) => (
+                  {availableTests.map(({ id, testType, title, status }) => (
                     <TestCell
                       key={id}
-                      caption={getCaption(type)}
-                      before={getIcon(type)}
+                      caption={getCaption(testType)}
+                      before={getIcon(testType)}
                       after={getAfterText(status)}
                       actions={
                         <Button mode="secondary" onClick={() => setActivePanel(PanelIds.Test, { id })}>
@@ -152,11 +152,11 @@ export const Home: React.FC<TPanel> = memo(({ id }) => {
                   >
                     История исследований
                   </Headline>
-                  {unavailableTests.map(({ id, type, title, status }) => (
+                  {unavailableTests.map(({ id, testType, title, status }) => (
                     <TestCell
                       key={id}
-                      caption={getCaption(type)}
-                      before={getIcon(type)}
+                      caption={getCaption(testType)}
+                      before={getIcon(testType)}
                       after={getAfterText(status)}
                       style={{ opacity: 0.4 }}
                     >

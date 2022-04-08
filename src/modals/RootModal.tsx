@@ -8,8 +8,8 @@ import { TestModal } from './TestModal/TestModal';
 import { useRouterStore } from '../store';
 
 export const RootModal: FC = memo(() => {
-  const activeModal = useRouterStore((state) => state.activeModal)
-  const closeActiveModal = useRouterStore((state) => state.closeActiveModal)
+  const activeModal = useRouterStore((state) => state.activeModal);
+  const closeActiveModal = useRouterStore((state) => state.closeActiveModal);
 
   return (
     <ModalRoot activeModal={activeModal}>
