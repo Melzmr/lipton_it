@@ -12,7 +12,7 @@ import { FiveSecStat } from './FiveSecStat';
 export type TQuestion = {
   _id: string;
   title: string;
-  testId: TTest['id'];
+  testId: TTest['_id'];
   data: string[];
 };
 
