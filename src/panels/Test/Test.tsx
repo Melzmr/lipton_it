@@ -53,7 +53,7 @@ export const Test: FC<TPanel> = memo(({ id }) => {
           {testData?.testType && getCaption(testData.testType)}
         </PanelHeader>
         <Spacing style={{ padding: 0 }} separator />
-        {error && <Placeholder>Ошибка</Placeholder>}
+        {error && <Placeholder>Ошибка, такого теста не существует</Placeholder>}
         {loading && <PanelSpinner />}
         {!error && !loading && testData && (
           <Div>

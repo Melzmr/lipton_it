@@ -22,12 +22,27 @@ import { getAfterText, getCaption, getIcon } from '../../utils';
 import { fetchData } from '../../api/Api';
 
 export const Home: React.FC<TPanel> = memo(({ id }) => {
-  // const setActiveModal = useRouterStore((state) => state.setActiveModal);
   const setActivePanel = useRouterStore((state) => state.setActivePanel);
   const [availableTests, setAvailableTests] = useState<TTest[]>([]);
   const [unavailableTests, setUnavailableTests] = useState<TTest[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+
+  useEffect(() => {
+    const hashParams = window.location.hash
+      .replace('#', '')
+      .split('&')
+      .reduce((acc: Record<string, string>, cur) => {
+        const [key, value] = cur.split('=');
+        acc[key] = value;
+
+        return acc;
+      }, {});
+    if (hashParams.test) {
+      setActivePanel(PanelIds.Test, { id: hashParams.test });
+      window.location.hash = '';
+    }
+  }, [setActivePanel]);
 
   useEffect(() => {
     (async () => {
