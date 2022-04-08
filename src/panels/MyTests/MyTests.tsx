@@ -48,33 +48,9 @@ export const MyTests: FC<TPanel> = memo(({ id }) => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     try {
-  //       const avTests: TTest[] = [];
-  //       const unavTests: TTest[] = [];
-  //
-  //       mocks.forEach((test) => {
-  //         if (test.status === 'available') {
-  //           avTests.push(test);
-  //         } else {
-  //           unavTests.push(test);
-  //         }
-  //       });
-  //
-  //       setMyTests(avTests);
-  //     } catch (e) {
-  //       setError(true);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   }, 300);
-  // }, []);
-
   useEffect(() => {
     (async function () {
       try {
-        setLoading(true);
         const tests = await fetchData('/test/my');
 
         setMyTests(tests);

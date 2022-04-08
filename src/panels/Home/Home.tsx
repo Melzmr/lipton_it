@@ -13,11 +13,13 @@ import {
   Tabs,
   TabsItem,
 } from '@vkontakte/vkui';
+import { Icon56UsersOutline } from '@vkontakte/icons';
 import { TPanel } from '../TPanel';
 import { useRouterStore } from '../../store';
 import { TestCell } from '../../components/TestCell';
-import { mocks, TTest } from '../../store/testsMocks';
+import { TTest } from '../../store/testsMocks';
 import { getAfterText, getCaption, getIcon } from '../../utils';
+import { fetchData } from '../../api/Api';
 
 export const Home: React.FC<TPanel> = memo(({ id }) => {
   // const setActiveModal = useRouterStore((state) => state.setActiveModal);
@@ -28,27 +30,18 @@ export const Home: React.FC<TPanel> = memo(({ id }) => {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    setTimeout(() => {
+    (async () => {
       try {
-        const avTests: TTest[] = [];
-        const unavTests: TTest[] = [];
-
-        mocks.forEach((test) => {
-          if (test.status === 'available') {
-            avTests.push(test);
-          } else {
-            unavTests.push(test);
-          }
-        });
-
+        const avTests = await fetchData('/test');
+        const historyTests = await fetchData('/test/history');
         setAvailableTests(avTests);
-        setUnavailableTests(unavTests);
+        setUnavailableTests(historyTests);
       } catch (e) {
         setError(true);
       } finally {
         setLoading(false);
       }
-    }, 300);
+    })();
   }, []);
 
   return (
@@ -69,6 +62,9 @@ export const Home: React.FC<TPanel> = memo(({ id }) => {
         <Div>
           {error && <Placeholder>Ошибка</Placeholder>}
           {loading && <PanelSpinner />}
+          {!error && !loading && !availableTests.length && !unavailableTests.length && (
+            <Placeholder icon={<Icon56UsersOutline />}>Пока нет доступных тестов</Placeholder>
+          )}
           {!error && !loading && (
             <>
               {!!availableTests.length && (
