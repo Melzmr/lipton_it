@@ -5,6 +5,7 @@ export function Image({
   imgUrl,
   onLoadCallback,
   onClick,
+  ...rest
 }: {
   imgUrl: string;
   onLoadCallback?: () => void;
@@ -34,7 +35,7 @@ export function Image({
   return (
     <>
       {!imgIsLoaded && <PanelSpinner />}
-      <img ref={imgRef} src={imgUrl} width="100%" alt="" onClick={onClick} />
+      <img ref={imgRef} src={imgUrl} width="100%" alt="" onClick={onClick} {...rest} />
     </>
   );
 }

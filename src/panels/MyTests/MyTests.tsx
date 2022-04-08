@@ -109,7 +109,10 @@ export const MyTests: FC<TPanel> = memo(({ id }) => {
                       }
                       actions={
                         <>
-                          <Button mode="secondary" onClick={() => setActivePanel(PanelIds.Results, { id: test._id })}>
+                          <Button
+                            mode="secondary"
+                            onClick={() => setActivePanel(PanelIds.Statistic, { testId: test._id })}
+                          >
                             Статистика
                           </Button>
 

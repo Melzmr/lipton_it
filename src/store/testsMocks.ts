@@ -8,6 +8,7 @@ export type TTest = {
   testType: TestType;
   title: string;
   status: TestStatus;
+  createdAt: string;
 };
 
 export const mocks: TTest[] = [
@@ -17,6 +18,7 @@ export const mocks: TTest[] = [
     testType: 'five_sec',
     title: 'Тест от команды VK Pay',
     status: 'available',
+    createdAt: '2022-04-07T21:15:54.478Z',
   },
   {
     _id: '2',
@@ -24,6 +26,7 @@ export const mocks: TTest[] = [
     testType: 'side_by_side',
     title: 'Тест от команды VK Pay',
     status: 'available',
+    createdAt: '2022-04-07T21:15:54.478Z',
   },
   {
     _id: '3',
@@ -31,6 +34,7 @@ export const mocks: TTest[] = [
     testType: 'first_click',
     title: 'Тест от команды VK Pay',
     status: 'available',
+    createdAt: '2022-04-07T21:15:54.478Z',
   },
   {
     _id: '4',
@@ -38,6 +42,7 @@ export const mocks: TTest[] = [
     testType: 'five_sec',
     title: 'Тест от команды VK Pay',
     status: 'completed',
+    createdAt: '2022-04-07T21:15:54.478Z',
   },
   {
     _id: '5',
@@ -45,5 +50,6 @@ export const mocks: TTest[] = [
     testType: 'five_sec',
     title: 'Тест от команды VK Pay',
     status: 'unavailable',
+    createdAt: '2022-04-07T21:15:54.478Z',
   },
 ];
