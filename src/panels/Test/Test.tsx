@@ -19,6 +19,11 @@ export const Test: FC<TPanel> = memo(({ id }) => {
       try {
         const { id } = panelParams.current as { id: string };
         const test = await fetchData(`/test/${id}`);
+        if (test.completed) {
+          closeActivePanel();
+
+          return;
+        }
         setTestData(test);
       } catch (e) {
         setError(true);
@@ -26,7 +31,7 @@ export const Test: FC<TPanel> = memo(({ id }) => {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [closeActivePanel]);
 
   return (
     <Panel id={id}>
