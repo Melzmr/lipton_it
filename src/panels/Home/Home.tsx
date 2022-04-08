@@ -49,8 +49,17 @@ export const Home: React.FC<TPanel> = memo(({ id }) => {
       try {
         const avTests = await fetchData('/test');
         const historyTests = await fetchData('/test/history');
-        setAvailableTests(avTests.reverse());
-        setUnavailableTests(historyTests.reverse());
+        const completed: (TTest & { completed: boolean })[] = [];
+        const uncompleted: TTest[] = [];
+        avTests.forEach((test: TTest & { completed: boolean }) => {
+          if (test.completed) {
+            completed.push(test);
+          } else {
+            uncompleted.push(test);
+          }
+        });
+        setAvailableTests(uncompleted.reverse());
+        setUnavailableTests([...completed.reverse(), ...historyTests.reverse()]);
       } catch (e) {
         setError(true);
       } finally {
