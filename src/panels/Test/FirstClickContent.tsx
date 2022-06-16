@@ -27,7 +27,10 @@ function Question({
       <Image
         imgUrl={data[0]}
         onClick={(e, left, top) => {
-          onClick(`${e.clientX - (left ?? 0)}|${e.clientY - (top ?? 0)}`, _id);
+          const { height, width } = e.currentTarget.getBoundingClientRect();
+          const widthPercentage = (((width - e.clientX + (left ?? 0)) / width) * 100).toFixed(4);
+          const heightPercentage = (((height - e.clientY + (top ?? 0)) / height) * 100).toFixed(4);
+          onClick(`${widthPercentage}|${heightPercentage}`, _id);
         }}
         style={{ marginTop: 24, width: '100%' }}
       />

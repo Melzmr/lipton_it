@@ -8,7 +8,7 @@ export function Image({
   ...rest
 }: {
   imgUrl: string;
-  onLoadCallback?: () => void;
+  onLoadCallback?: (ref?: HTMLImageElement) => void;
   onClick?: (e: React.MouseEvent<HTMLImageElement>, left?: number, top?: number) => void;
 } & Omit<
   React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>,
@@ -24,7 +24,7 @@ export function Image({
         if (imgRef.current) {
           imgRef.current.style.display = 'block';
           setImgIsLoaded(true);
-          onLoadCallbackRef?.();
+          onLoadCallbackRef?.(imgRef.current);
         }
       };
 

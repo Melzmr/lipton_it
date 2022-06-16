@@ -50,7 +50,7 @@ export const fetchData = async (url = '', method: FetchOptions['method'] = 'GET'
     };
   }
 
-  const response = await fetch(`https://lipton-it.herokuapp.com/api${url}`, options);
+  const response = await fetch(`https://lipton-it.vkpay.prod.kapps.vk-apps.ru/api${url}`, options);
 
   if (response.status !== 200) {
     throw new Error();
