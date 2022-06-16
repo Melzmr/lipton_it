@@ -7,8 +7,6 @@ import { useCreateTestStore } from '../../store/createTestStore';
 
 export const CreateQuestion: FC<TPanel> = memo(({ id }) => {
   const [title, setTitle] = useState<string>();
-  const [href, setHref] = useState<string>();
-  const [href2, setHref2] = useState<string>();
   const closeActivePanel = useRouterStore((state) => state.closeActivePanel);
   const appendQuestion = useCreateTestStore((state) => state.appendQuestion);
   const testType = useCreateTestStore((state) => state.type);
@@ -17,12 +15,16 @@ export const CreateQuestion: FC<TPanel> = memo(({ id }) => {
   const href2Ref = useRef<any>(null);
 
   const handleSave = async () => {
-    if (title && href && ((testType === 'side_by_side' && href2) || testType !== 'side_by_side')) {
+    if (
+      title &&
+      hrefRef.current.files[0] &&
+      ((testType === 'side_by_side' && href2Ref.current.files[0]) || testType !== 'side_by_side')
+    ) {
       const formData = new FormData();
 
       if (hrefRef.current) {
         formData.append('images', hrefRef.current.files[0], hrefRef.current.files[0].name);
-        if (href2 && href2Ref.current) {
+        if (href2Ref.current) {
           formData.append('images', href2Ref.current.files[0], href2Ref.current.files[0].name);
         }
       }
@@ -75,25 +77,11 @@ export const CreateQuestion: FC<TPanel> = memo(({ id }) => {
         </FormItem>
         <div style={{ display: 'flex' }}>
           <FormItem top="Картинка">
-            <Input
-              getRef={hrefRef}
-              type="file"
-              value={href}
-              onChange={(ev) => setHref(ev.target.value)}
-              placeholder="Введите ссылку на картинку"
-              accept="image/*"
-            />
+            <Input getRef={hrefRef} type="file" accept="image/*" />
           </FormItem>
           {testType === 'side_by_side' && (
             <FormItem top="Вторая картинка">
-              <Input
-                getRef={href2Ref}
-                type="file"
-                value={href2}
-                onChange={(ev) => setHref2(ev.target.value)}
-                placeholder="Введите ссылку на вторую картинку"
-                accept="image/*"
-              />
+              <Input getRef={href2Ref} type="file" placeholder="Введите ссылку на вторую картинку" accept="image/*" />
             </FormItem>
           )}
         </div>
@@ -101,7 +89,7 @@ export const CreateQuestion: FC<TPanel> = memo(({ id }) => {
           <Button mode="secondary" style={{ marginRight: 10 }} onClick={closeActivePanel}>
             Не сохранять
           </Button>
-          <Button onClick={handleSave} disabled={!title || !href}>
+          <Button onClick={handleSave} disabled={!title || !hrefRef.current.files[0]}>
             Сохранить
           </Button>
         </div>
