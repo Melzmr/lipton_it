@@ -40,11 +40,15 @@ export const EditQuestion: FC<TPanel> = memo(({ id }) => {
   const panelProps = useRef<{ isEditing: boolean }>(
     useRouterStore((state) => state.panelParams[state.panelParams.length - 1]) as { isEditing: boolean },
   );
+  const isPrivateFromStore = useCreateTestStore((state) => state.isPrivate);
+  const updateIsPrivate = useCreateTestStore((state) => state.updateIsPrivate);
+  const platformFromStore = useCreateTestStore((state) => state.platform);
+  const updatePlatform = useCreateTestStore((state) => state.updatePlatform);
   const { isEditing } = panelProps.current ?? {};
   const [title, setTitle] = useState<string>(name ?? '');
   const [description, setDescription] = useState<string>(descriptionFromStore ?? '');
-  const [isPrivate, setIsPrivate] = useState<boolean>(false);
-  const [platform, setPlatform] = useState<'mobile' | 'desktop'>('desktop');
+  const [isPrivate, setIsPrivate] = useState<boolean>(isPrivateFromStore ?? false);
+  const [platform, setPlatform] = useState<'mobile' | 'desktop'>(platformFromStore ?? 'desktop');
 
   const handleSubmit = async () => {
     if (questions?.length && questions.length > 0 && description && title) {
@@ -111,16 +115,35 @@ export const EditQuestion: FC<TPanel> = memo(({ id }) => {
         </FormItem>
         <FormItem top="Платформа">
           <RadioGroup mode="horizontal" style={{ width: 440 }}>
-            <Radio onChange={() => setPlatform('desktop')} checked={platform === 'desktop'}>
+            <Radio
+              onChange={() => {
+                updatePlatform('desktop');
+                setPlatform('desktop');
+              }}
+              checked={platform === 'desktop'}
+            >
               Десктоп
             </Radio>
-            <Radio onChange={() => setPlatform('mobile')} checked={platform === 'mobile'}>
+            <Radio
+              onChange={() => {
+                updatePlatform('mobile');
+                setPlatform('mobile');
+              }}
+              checked={platform === 'mobile'}
+            >
               Мобильный телефон
             </Radio>
           </RadioGroup>
         </FormItem>
         <FormItem top="Доступность">
-          <Checkbox onChange={(e) => setIsPrivate(e.target.checked)} checked={isPrivate} style={{ width: 275 }}>
+          <Checkbox
+            onChange={(e) => {
+              updateIsPrivate(e.target.checked);
+              setIsPrivate(e.target.checked);
+            }}
+            checked={isPrivate}
+            style={{ width: 275 }}
+          >
             Тест доступен только по ссылке
           </Checkbox>
         </FormItem>

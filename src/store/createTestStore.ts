@@ -12,11 +12,15 @@ type CreateTestStore = {
   name?: string;
   description?: string;
   questions?: CreateTestQuestion[];
+  isPrivate?: boolean;
+  platform?: 'mobile' | 'desktop';
   updateName(name?: string): void;
   updateDescription(desc?: string): void;
   updateType(type: TestType): void;
   appendQuestion(question: CreateTestQuestion): void;
   deleteQuestion(id: number): void;
+  updateIsPrivate(value: boolean): void;
+  updatePlatform(platform: 'mobile' | 'desktop'): void;
   clearAll(): void;
 };
 
@@ -46,11 +50,21 @@ export const useCreateTestStore = create<CreateTestStore>((set) => ({
         questions: newQuestions,
       };
     }),
+  updateIsPrivate: (value: boolean) =>
+    set({
+      isPrivate: value,
+    }),
+  updatePlatform: (platform: 'mobile' | 'desktop') =>
+    set({
+      platform,
+    }),
   clearAll: () =>
     set({
       name: undefined,
       description: undefined,
       questions: undefined,
       type: undefined,
+      platform: undefined,
+      isPrivate: undefined,
     }),
 }));
