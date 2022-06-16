@@ -1,3 +1,5 @@
+import { VK_PLATFORMS } from '../constants/VkPlatforms';
+
 type FetchOptions = {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
   mode: 'cors';
@@ -29,6 +31,12 @@ function getAuthParams() {
 
 export const authParams = getAuthParams();
 
+const vkPlatformFromVK = authParams.vk_platform;
+const vkPlatform =
+  vkPlatformFromVK === VK_PLATFORMS.DESKTOP_WEB || vkPlatformFromVK === VK_PLATFORMS.WEB_EXTERNAL
+    ? 'desktop'
+    : 'mobile';
+
 export const fetchData = async (url = '', method: FetchOptions['method'] = 'GET', data = {}) => {
   let options: FetchOptions = {
     method, // *GET, POST, PUT, DELETE, etc.
@@ -38,6 +46,7 @@ export const fetchData = async (url = '', method: FetchOptions['method'] = 'GET'
     headers: {
       'Content-Type': 'application/json',
       Authorization: JSON.stringify(authParams),
+      Platform: vkPlatform,
     },
     redirect: 'follow', // manual, *follow, error
     referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
