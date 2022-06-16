@@ -12,3 +12,4 @@ dist
 /tmp
 __diff_output__
 ssl
+/build
