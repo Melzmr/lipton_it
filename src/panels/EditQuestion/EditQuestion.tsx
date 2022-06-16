@@ -2,6 +2,7 @@ import { FC, memo, useRef, useState } from 'react';
 import { Icon20TrashSmileOutline, Icon28ChevronLeftOutline } from '@vkontakte/icons';
 import {
   Button,
+  Checkbox,
   Div,
   FormItem,
   Group,
@@ -10,6 +11,8 @@ import {
   Link,
   Panel,
   PanelHeader,
+  Radio,
+  RadioGroup,
   Spacing,
   Subhead,
   Tappable,
@@ -40,6 +43,8 @@ export const EditQuestion: FC<TPanel> = memo(({ id }) => {
   const { isEditing } = panelProps.current ?? {};
   const [title, setTitle] = useState<string>(name ?? '');
   const [description, setDescription] = useState<string>(descriptionFromStore ?? '');
+  const [isPrivate, setIsPrivate] = useState<boolean>(false);
+  const [platform, setPlatform] = useState<'mobile' | 'desktop'>('desktop');
 
   const handleSubmit = async () => {
     if (questions?.length && questions.length > 0 && description && title) {
@@ -50,6 +55,8 @@ export const EditQuestion: FC<TPanel> = memo(({ id }) => {
         status: 'available',
         description,
         questions,
+        isPrivate,
+        platform,
       });
       // TODO isEditing = true THEN PUT
       // PUT BALHBALBLA
@@ -101,6 +108,21 @@ export const EditQuestion: FC<TPanel> = memo(({ id }) => {
             onChange={(ev) => setDescription(ev.target.value)}
             placeholder="Введите описание"
           />
+        </FormItem>
+        <FormItem top="Платформа">
+          <RadioGroup mode="horizontal" style={{ width: 440 }}>
+            <Radio onChange={() => setPlatform('desktop')} checked={platform === 'desktop'}>
+              Десктоп
+            </Radio>
+            <Radio onChange={() => setPlatform('mobile')} checked={platform === 'mobile'}>
+              Мобильный телефон
+            </Radio>
+          </RadioGroup>
+        </FormItem>
+        <FormItem top="Доступность">
+          <Checkbox onChange={(e) => setIsPrivate(e.target.checked)} checked={isPrivate} style={{ width: 275 }}>
+            Тест доступен только по ссылке
+          </Checkbox>
         </FormItem>
         <Spacing separator />
         <Div style={{ display: 'flex', justifyContent: 'space-between' }}>
