@@ -5,7 +5,7 @@ import { TPanel } from '../TPanel';
 import { useRouterStore } from '../../store';
 import { TTestData } from '../../store/testsMocks';
 import { TestContent } from './TestContent';
-import { fetchData } from '../../api/Api';
+import { fetchData, vkPlatform } from '../../api/Api';
 
 export const Test: FC<TPanel> = memo(({ id }) => {
   const closeActivePanel = useRouterStore((state) => state.closeActivePanel);
@@ -18,7 +18,7 @@ export const Test: FC<TPanel> = memo(({ id }) => {
     (async () => {
       try {
         const { id } = panelParams.current as { id: string };
-        const test = await fetchData(`/test/${id}`);
+        const test = await fetchData(`/test/${id}?user_platform=${vkPlatform}`);
         if (test.completed) {
           closeActivePanel();
 

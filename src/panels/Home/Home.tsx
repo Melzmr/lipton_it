@@ -19,7 +19,7 @@ import { useRouterStore } from '../../store';
 import { TestCell } from '../../components/TestCell';
 import { TTest } from '../../store/testsMocks';
 import { getAfterText, getCaption, getIcon } from '../../utils';
-import { fetchData } from '../../api/Api';
+import { fetchData, vkPlatform } from '../../api/Api';
 
 export const Home: React.FC<TPanel> = memo(({ id }) => {
   const setActivePanel = useRouterStore((state) => state.setActivePanel);
@@ -47,8 +47,8 @@ export const Home: React.FC<TPanel> = memo(({ id }) => {
   useEffect(() => {
     (async () => {
       try {
-        const avTests = await fetchData('/test');
-        const historyTests = await fetchData('/test/history');
+        const avTests = await fetchData(`/test?user_platform=${vkPlatform}`);
+        const historyTests = await fetchData(`/test/history?user_platform=${vkPlatform}`);
         const completed: (TTest & { completed: boolean })[] = [];
         const uncompleted: TTest[] = [];
         avTests.forEach((test: TTest & { completed: boolean }) => {

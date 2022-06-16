@@ -32,7 +32,7 @@ function getAuthParams() {
 export const authParams = getAuthParams();
 
 const vkPlatformFromVK = authParams.vk_platform;
-const vkPlatform =
+export const vkPlatform =
   vkPlatformFromVK === VK_PLATFORMS.DESKTOP_WEB || vkPlatformFromVK === VK_PLATFORMS.WEB_EXTERNAL
     ? 'desktop'
     : 'mobile';
@@ -46,7 +46,6 @@ export const fetchData = async (url = '', method: FetchOptions['method'] = 'GET'
     headers: {
       'Content-Type': 'application/json',
       Authorization: JSON.stringify(authParams),
-      Platform: vkPlatform,
     },
     redirect: 'follow', // manual, *follow, error
     referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
