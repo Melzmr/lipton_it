@@ -17,13 +17,13 @@ export const getCaption = (type: TestType): string => {
 export const getAfterText = (status: TestStatus): string => {
   switch (status) {
     case 'available':
-      return 'Доступен';
+      return 'Не пройден';
 
     case 'completed':
       return 'Пройден';
 
     case 'unavailable':
-      return 'Не пройден';
+      return 'Не доступен';
   }
 };
 
