@@ -1,6 +1,17 @@
 import { FC, memo, useEffect, useRef, useState } from 'react';
-import { Div, Group, Panel, PanelHeader, PanelSpinner, Placeholder, Spacing, Tappable, Text } from '@vkontakte/vkui';
-import { Icon28ChevronLeftOutline } from '@vkontakte/icons';
+import {
+  Button,
+  Div,
+  Group,
+  Panel,
+  PanelHeader,
+  PanelSpinner,
+  Placeholder,
+  Spacing,
+  Tappable,
+  Text,
+} from '@vkontakte/vkui';
+import { Icon28ChevronLeftOutline, Icon56ComputerOutline, Icon56SmartphoneOutline } from '@vkontakte/icons';
 import { TPanel } from '../TPanel';
 import { useRouterStore } from '../../store';
 import { TTestData } from '../../store/testsMocks';
@@ -13,6 +24,8 @@ export const Test: FC<TPanel> = memo(({ id }) => {
   const [testData, setTestData] = useState<TTestData>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [isWrongPlatform, setIsWrongPlatform] = useState(false);
+  const isDesktop = vkPlatform === 'desktop';
 
   useEffect(() => {
     (async () => {
@@ -26,6 +39,9 @@ export const Test: FC<TPanel> = memo(({ id }) => {
         }
         setTestData(test);
       } catch (e) {
+        if (e.message === 'invalid_platform') {
+          setIsWrongPlatform(true);
+        }
         setError(true);
       } finally {
         setLoading(false);
@@ -57,7 +73,18 @@ export const Test: FC<TPanel> = memo(({ id }) => {
           {testData?.title}
         </PanelHeader>
         <Spacing style={{ padding: 0 }} separator />
-        {error && <Placeholder>Ошибка, такого теста не существует</Placeholder>}
+        {error &&
+          (isWrongPlatform ? (
+            <Placeholder
+              icon={isDesktop ? <Icon56SmartphoneOutline /> : <Icon56ComputerOutline />}
+              action={<Button onClick={closeActivePanel}>Закрыть</Button>}
+              header={`Тест доступен только для ${isDesktop ? 'смартфонов' : 'компьютера'}`}
+            >
+              Откройте его с&nbsp;{isDesktop ? 'мобильного телефона' : 'компьютера'}, чтобы начать проходить
+            </Placeholder>
+          ) : (
+            <Placeholder>Ошибка, такого теста не существует</Placeholder>
+          ))}
         {loading && <PanelSpinner />}
         {!error && !loading && testData && (
           <Div>

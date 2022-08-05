@@ -61,7 +61,12 @@ export const fetchData = async (url = '', method: FetchOptions['method'] = 'GET'
   const response = await fetch(`https://lipton-it.vkpay.prod.kapps.vk-apps.ru/api${url}`, options);
 
   if (response.status !== 200) {
-    throw new Error();
+    try {
+      const res = await response.json();
+      throw new Error(res?.error);
+    } catch (e) {
+      throw new Error(e?.message);
+    }
   }
 
   const contentType = response.headers.get('content-type');
